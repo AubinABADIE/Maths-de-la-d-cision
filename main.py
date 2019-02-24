@@ -1,7 +1,6 @@
 from import_csv import *
 
-ids, preferences = import_csv()
-
+preferences = sort_preferences(import_csv())
 
 def get_line(i):
     return preferences[i]
