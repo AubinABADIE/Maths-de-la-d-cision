@@ -12,12 +12,12 @@ def readprefs(prefsfn):
     """
     read the preferences from "prefs.csv"
     """
-    inner = csv.reader(open(prefsfn))
+    # inner = csv.reader(open(prefsfn))
 
     prefs = {}
 
 
-    for line in inner:
+    for line in prefsfn:
         if len(line) == 0: continue
         line = [s.strip() for s in line]
         prefs[line[0]] = line[1:]
@@ -33,7 +33,7 @@ def fillin(prefs):
 
     names = set(prefs.keys())
 
-    for name, choices in prefs.iteritems():
+    for name, choices in prefs.items():
 
         left = set(names).difference([name]).difference(choices)
 
@@ -43,32 +43,7 @@ def fillin(prefs):
             random.shuffle(left)
             choices.extend(left)
 
-def checkprefs(prefs):
-    """
-    - `prefs`: preferences dict, name key, list of names as choices in order
-    """
 
-    names = set(prefs.keys())
-
-    for name, choices in prefs.iteritems():
-        try:
-            assert len(names.difference(choices)) == 1
-        except AssertionError, e:
-            log.alert("len(names.difference(choices)) = {0} != 0".format(
-                len(names.difference(choices))))
-            log.alert(name, choices)
-            log.alert(names.difference(choices))
-
-            raise AssertionError(e)
-
-
-        try:
-            assert len(choices) == len(names) - 1
-        except AssertionError, e:
-            log.critical("len(choices) != len(names) - 1")
-            log.critical("{0} != {1}".format(len(choices), len(names)-1))
-            log.critical("{0} {1}".format(name, choices))
-            raise AssertionError(e)
 
 
 def verify_ranks(ranks, prefs):
@@ -172,7 +147,7 @@ def phase1(prefs, ranks, curpref=None, debug=False):
     if curpref is None:
         curpref = dict( (name, 0) for name in prefs.keys() )
 
-    people = prefs.keys()
+    people = list(prefs.keys())
     random.shuffle(people)
 
     proposed_to = set()
@@ -232,11 +207,11 @@ def stableroomate(prefsfn, debug=False):
     fillin(prefs)
 
     # validate that names are correct
-    checkprefs(prefs)
+    # checkprefs(prefs)
 
     # generate a dictionary of rank values for each name
     ranks = dict( (idx, dict(zip(val,range(len(val)) )))
-                 for idx,val in prefs.iteritems() )
+                 for idx,val in prefs.items() )
 
     # validate the ranks correspond to the proper indices
     verify_ranks(ranks, prefs)
@@ -251,7 +226,7 @@ def stableroomate(prefsfn, debug=False):
     cycle = find_all_or_nothing(prefs, ranks, holds)
 
     if cycle is not None and  len(cycle) == 3:
-        print "no solution exists"
+        print ("no solution exists")
         return
 
     ## phase 2
@@ -372,33 +347,23 @@ def main():
     main function
     """
 
-    # random.seed(1000)
+    prefs = [
+        ['1', '3', '2', '4'],
+        ['2', '4', '1', '3'],
+        ['3', '1', '4', '2'],
+        ['4', '2', '3', '1']
+    ]
 
-    parser = optparse.OptionParser(usage="usage: %prog [options] prefsfn")
-    parser.add_option("-v", dest="validate", action="store_true",
-                      default=False, help="Validate the Algorithm")
-    parser.add_option("-d", dest="debug", action="store_true",
-                      default=False, help="Print Debuggin Code")
-    (options, args) = parser.parse_args()
-
-
-    if options.debug:
-        logging.basicConfig(level=logging.DEBUG)
-
-    if len(args) < 1:
-        parser.print_help()
-        return
-
-    matches = stableroomate(args[0], options.debug)
+    matches = stableroomate(prefs)
 
     if matches is not None:
         print("-- matches -----------")
         for m in matches:
-            print "{0} {1}".format(m, matches[m])
+            print ("{0} {1}".format(m, matches[m]))
 
-        if options.validate:
-            log.info("verifying matches...")
-            verify_match(matches)
+        # if options.validate:
+        #     log.info("verifying matches...")
+        #     verify_match(matches)
 
 
 
