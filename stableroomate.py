@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 
+from import_csv import *
+
+
 import csv
 import random
 import sys
@@ -317,29 +320,6 @@ def swap_better(set1, set2, ranks):
 
 
 
-def verify_match(matches):
-    """
-    """
-
-    prefsfn = sys.argv[1]
-
-    # read prefs from file
-    prefs = readprefs(prefsfn)
-    fillin(prefs)
-
-    # generate a dictionary of rank values for each name
-    ranks = dict( (idx, dict(zip(val,range(len(val)) )))
-                 for idx,val in prefs.iteritems() )
-
-    for x in matches:
-        for y in matches:
-            if y == x or y == matches[x]:
-                continue
-
-            set1 = (x, matches[x])
-            set2 = (y, matches[y])
-
-            swap_better(set1, set2, ranks)
 
 
 def main():
@@ -354,12 +334,16 @@ def main():
         ['4', '2', '3', '1']
     ]
 
-    matches = stableroomate(prefs)
+    ids, preferences = import_csv()
+
+    preferences = sort_preferences(ids, preferences)
+
+    matches = stableroomate(preferences)
 
     if matches is not None:
         print("-- matches -----------")
         for m in matches:
-            print ("{0} {1}".format(m, matches[m]))
+            print("{0} {1}".format(m, matches[m]))
 
         # if options.validate:
         #     log.info("verifying matches...")

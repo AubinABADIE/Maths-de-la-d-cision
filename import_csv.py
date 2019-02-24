@@ -4,7 +4,7 @@ order = ['TB', 'B', 'AB', 'P', 'I', 'AR']
 
 
 def import_csv():
-    size = 11
+    size = 40
 
     ids = []
     preferences = []
@@ -33,7 +33,7 @@ def map_func(c, i, ids):
     elif c == 'AR':
         return c, 1, ids[i]
     else:
-        return c, 0, ids[i]
+        return c, 7, ids[i]
 
 
 def sort_preferences(ids, preferences):
@@ -48,7 +48,7 @@ def sort_preferences(ids, preferences):
         sorted_row = sorted(row, key=lambda tup: tup[1], reverse=True)
         temp2.append(sorted_row)
     out = []
-    for row in temp2:
+    for i, row in enumerate(temp2):
         out.append(list(map(lambda c: c[2], row)))
 
     return out

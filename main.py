@@ -15,4 +15,5 @@ def get_column(i):
         out.append(row[i])
     return out
 
+
 print('DONE')
