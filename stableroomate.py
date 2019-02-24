@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from import_csv import *
+from utlis import *
 
 
 import csv
@@ -256,7 +256,12 @@ def stableroomate(prefsfn, debug=False):
 
     # print prefs
     # print ranks
-    return holds
+    # return holds
+    matches = []
+    for i, m in enumerate(holds):
+        if not any(m in x for x in matches):
+            matches.append((m, holds[m]))
+    return matches
 
 def log_holds(holds):
     """
@@ -338,7 +343,7 @@ def main():
 
     preferences = sort_preferences(ids, preferences)
 
-    matches = stableroomate(preferences)
+    matches = stableroomate(prefs)
 
     if matches is not None:
         print("-- matches -----------")
