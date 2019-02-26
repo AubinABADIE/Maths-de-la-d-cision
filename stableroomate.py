@@ -229,7 +229,7 @@ def stableroomate(prefsfn, debug=False):
     cycle = find_all_or_nothing(prefs, ranks, holds)
 
     if cycle is not None and  len(cycle) == 3:
-        print ("no solution exists")
+        # print ("no solution exists")
         return
 
     ## phase 2
