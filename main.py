@@ -3,15 +3,22 @@ from stableroomate import *
 from stable_marriage import *
 
 order = ['TB', 'B', 'AB', 'P', 'I', 'AR']
-nb_people = 11
-nb_duos = 5
 marriage_match = []
 
-ids, preferences = import_csv()
-ids = ids[:nb_people]
-preferences = preferences[:nb_people]
+ids, preferences = import_csv(sys.argv[1])
+nb_people = len(ids)
+if nb_people > 36:
+    nb_duos = 18
+else:
+    nb_duos = round(len(ids)/2)
+
+# ids = ids[:nb_people]
+# preferences = preferences[:nb_people]
 preferences = list(map(lambda r: r[:nb_people], preferences))
 sorted_preferences = sort_preferences(ids, preferences)
+# random.shuffle(sorted_preferences)
+# for l in sorted_preferences:
+#     print(l)
 
 
 roommate_match = stableroomate(sorted_preferences)
@@ -19,7 +26,6 @@ roommate_match = stableroomate(sorted_preferences)
 if roommate_match:
 
     roommate_match = roommate_match[:nb_duos]
-
 
     alone = get_alone(ids, roommate_match)
 
@@ -44,7 +50,7 @@ if roommate_match:
         json["women_rankings"][name] = alone_preferences[i]
 
     marriage_match = StableMatching(json['men_rankings'], json['women_rankings'])
-    marriage_match = map(lambda m: (m[0].split("_")[0], m[0].split("_")[1], m[1]), marriage_match)
+    marriage_match = list(map(lambda m: [m[0].split("_")[0], m[0].split("_")[1], m[1]], marriage_match))
 
     for g in roommate_groups_to_match:
         roommate_match.remove(g)
@@ -82,4 +88,5 @@ def get_column(i):
     return out
 
 
+write_csv(final_match)
 print('DONE')

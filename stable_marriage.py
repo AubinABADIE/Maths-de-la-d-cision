@@ -118,7 +118,7 @@ def StableMatching(a, b):
     out = []
     for i, m in enumerate(engaged_dict):
         if not any(m in x for x in out):
-            out.append((m, engaged_dict[m]))
+            out.append([m, engaged_dict[m]])
     return out
     # return engaged_dict
 

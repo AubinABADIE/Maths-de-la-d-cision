@@ -260,7 +260,7 @@ def stableroomate(prefsfn, debug=False):
     matches = []
     for i, m in enumerate(holds):
         if not any(m in x for x in matches):
-            matches.append((m, holds[m]))
+            matches.append([m, holds[m]])
     return matches
 
 def log_holds(holds):

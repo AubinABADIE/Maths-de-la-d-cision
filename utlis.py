@@ -3,11 +3,11 @@ import csv
 order = ['TB', 'B', 'AB', 'P', 'I', 'AR']
 
 
-def import_csv():
+def import_csv(ext):
     ids = []
     preferences = []
 
-    with open('preferences.csv') as file:
+    with open('../DONNEES/preferences' + ext + '.csv') as file:
         read = csv.reader(file, delimiter=',')
         for row in read:
             if read.line_num == 1:
@@ -15,6 +15,15 @@ def import_csv():
             else:
                 preferences.append(row[1:])
     return ids, preferences
+
+
+def write_csv(repartition):
+    with open('AKL.csv', 'w') as file:
+        writer = csv.writer(file, delimiter=';')
+        rep = []
+        for g in repartition:
+            rep.append(' '.join(g))
+        writer.writerow(rep)
 
 
 def map_func(c, i, ids):
