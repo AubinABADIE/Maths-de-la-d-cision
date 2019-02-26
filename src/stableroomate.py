@@ -1,12 +1,8 @@
 #!/usr/bin/env python
 
-from utlis import *
+from src.utils import *
 
-
-import csv
 import random
-import sys
-import optparse
 import logging
 
 log = logging.getLogger("stableroommate")

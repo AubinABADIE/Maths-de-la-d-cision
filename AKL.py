@@ -1,25 +1,18 @@
-# from utlis import *
-from stableroomate import *
-from stable_marriage import *
+from src.stableroomate import *
+from src.stable_marriage import *
 
 order = ['TB', 'B', 'AB', 'P', 'I', 'AR']
 marriage_match = []
 
-ids, preferences = import_csv(sys.argv[1])
+ids, preferences = import_csv(sys.argv[1][1:])
 nb_people = len(ids)
 if nb_people > 36:
     nb_duos = 18
 else:
     nb_duos = round(len(ids)/2)
 
-# ids = ids[:nb_people]
-# preferences = preferences[:nb_people]
 preferences = list(map(lambda r: r[:nb_people], preferences))
 sorted_preferences = sort_preferences(ids, preferences)
-# random.shuffle(sorted_preferences)
-# for l in sorted_preferences:
-#     print(l)
-
 
 roommate_match = stableroomate(sorted_preferences)
 
@@ -73,20 +66,9 @@ if roommate_match:
 # for m in marriage_match:
 #     print(m)
 
-print("FINAL MATCH:")
-for m in final_match:
-    print(m)
-
-def get_line(i):
-    return preferences[i]
-
-
-def get_column(i):
-    out = []
-    for row in preferences:
-        out.append(row[i])
-    return out
-
+# print("FINAL MATCH:")
+# for m in final_match:
+#     print(m)
 
 write_csv(final_match)
-print('DONE')
+# print('DONE')
