@@ -1,4 +1,7 @@
 import csv
+from collections import Counter
+import copy
+import random
 
 order = ['TB', 'B', 'AB', 'P', 'I', 'AR']
 
@@ -18,7 +21,7 @@ def import_csv(ext):
 
 
 def write_csv(repartition):
-    with open('AKL.csv', 'w') as file:
+    with open('AKL.csv', 'a+') as file:
         writer = csv.writer(file, delimiter=';')
         rep = []
         for g in repartition:
@@ -71,8 +74,19 @@ def sort_preferences(ids, preferences):
     for row in temp:
         sorted_row = sorted(row, key=lambda tup: tup[1], reverse=True)
         temp2.append(sorted_row)
+
+    temp3 = []
+    for row in temp2:
+        counter = Counter(elem[0] for elem in row)
+        nb_tb = counter.get('TB')
+        tbs = copy.deepcopy(row[1:nb_tb+1])
+        random.shuffle(tbs)
+        row[1:nb_tb+1] = tbs
+        temp3.append(row)
+
+
     out = []
-    for i, row in enumerate(temp2):
+    for i, row in enumerate(temp3):
         out.append(list(map(lambda c: c[2], row)))
 
     return out
